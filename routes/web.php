@@ -4,9 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PetController;
 use App\Http\Livewire\MyPets;
 
-Route::view('/', 'welcome');
+//Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
+
+
+Route::view('/', 'dashboard')
     ->name('dashboard');
 
 Route::view('profile', 'profile')
@@ -17,6 +19,7 @@ require __DIR__.'/auth.php';
 
 // Rotas de pets
 Route::get('/pets/{id?}', \App\Http\Livewire\PetsIndex::class)->name('pets.index');
+
 
 // Rota de teste do mapa
 Route::get('/teste', function () {
