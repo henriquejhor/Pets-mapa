@@ -1,34 +1,63 @@
-<div class="max-w-4xl mx-auto p-6 bg-white shadow rounded">
+<div class="max-w-4xl mx-auto p-6 bg-[#01A58D] shadow rounded">
 
-    <h1 class="text-2xl font-bold mb-4">Minhas Publicações</h1>
+    <h1 class="text-2xl font-bold mb-4 text-white">Minhas Publicações</h1>
 
-    @if(session('message'))
-        <div class="p-2 bg-green-100 text-green-800 rounded mb-4">
-            {{ session('message') }}
+    @if (session()->has('success') || session()->has('message'))
+        <div 
+            x-data="{ show: true }"
+            x-show="show"
+            x-init="setTimeout(() => show = false, 5000)"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            style="display: none;" class="flex w-full overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 mb-4"
+        >
+            <div class="flex items-center justify-center w-12 bg-emerald-500">
+                <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z" />
+                </svg>
+            </div>
+            <div class="px-4 py-2 -mx-3">
+                <div class="mx-3">
+                    <span class="font-semibold text-emerald-500 dark:text-emerald-400">Sucesso</span>
+                    <p class="text-sm text-gray-600 dark:text-gray-200">{{ session('success') ?? session('message') }}</p>
+                </div>
+            </div>
         </div>
     @endif
-
     @if($pets->isEmpty())
         <p>Você ainda não publicou nenhum pet.</p>
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @foreach($pets as $pet)
-                <div class="p-4 border rounded shadow">
-                    <h2 class="font-semibold">{{ $pet->name ?? 'Sem nome'}}</h2>
-                    <p><strong>Tipo:</strong> {{ $pet->type }}</p>
-                    <p><strong>Cidade:</strong> {{ $pet->city }}</p>
-                    <p><strong>Telefone:</strong> {{ $pet->telefone }}</p>
+                <div class="text-black p-4 border-4 border-[#8AC7CF] rounded shadow flex items-start justify-between bg-[#6BAFB7]">
+                    
+                    <div class="flex flex-col bg-[#8AC7CF] py-2 px-2 rounded-lg flex-1">
+                        
+                        <h2 class="font-semibold text-2xl mb-2">{{ $pet->name ?? 'Sem nome'}}</h2>
+                        <p class="mb-1"><strong>Tipo:</strong> {{ $pet->type }}</p>
+                        <p class="mb-1"><strong>Cidade:</strong> {{ $pet->city }}</p>
+                        <p class="mb-4"><strong>Telefone:</strong> {{ $pet->telefone }}</p> 
+                        
+                        <div class="flex gap-3">
+                            <button wire:click="edit({{ $pet->id }})" 
+                                    class="bg-blue-600 text-white py-1 px-3 rounded-md hover:bg-blue-700 font-semibold">
+                                    <i class="fa-solid fa-pen-to-square text-white pt-1"></i>
+                                Editar
+                            </button>
+                            <button wire:click="delete({{ $pet->id }})" 
+                                    class="bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 font-semibold">
+                                    <i class="fa-solid fa-trash text-white pt-1"></i>
+                                Excluir
+                            </button>
+                        </div>
+                    </div>
 
                     @if($pet->image_path)
-                            <img src="{{ asset('storage/'.$pet->image_path) }}"
-                                class="mt-2 rounded w-40 h-40 object-cover"
-                                alt="Foto do Pet">
+                        <img src="{{ asset('storage/'.$pet->image_path) }}"
+                             alt="Foto do Pet"
+                             class="rounded w-40 h-40 object-cover ml-4 border-8 border-[#8AC7CF] flex-shrink-0">
                     @endif
-
-                    <div class="mt-2 flex gap-3">
-                        <button wire:click="edit({{ $pet->id }})" class="text-blue-600">Editar</button>
-                        <button wire:click="delete({{ $pet->id }})" class="text-red-600">Excluir</button>
-                    </div>
                 </div>
             @endforeach
         </div>
@@ -56,8 +85,8 @@
                     <input type="text" wire:model="telefone" placeholder="Telefone"
                            class="w-full border rounded p-2">
 
-                    <textarea wire:model="description" placeholder="Descrição"
-                              class="w-full border rounded p-2"></textarea>
+                    <textarea wire:model="description" placeholder="Descrição" maxlength="100"
+                               class="w-full border rounded p-2"></textarea>
 
                     @if($image_preview)
                         <div>
