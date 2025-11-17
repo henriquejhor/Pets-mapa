@@ -63,6 +63,7 @@
         </div>
     @endif
 
+    
     {{-- Modal de edição --}}
     @if($showEditModal)
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -70,42 +71,74 @@
                 <h2 class="text-xl font-bold mb-4">Editar Publicação</h2>
 
                 <div class="space-y-3">
-                    <input type="text" wire:model="name" placeholder="Nome do Pet"
-                           class="w-full border rounded p-2">
-                    
-                    <select wire:model="type" class="w-full border rounded p-2">
-                        <option value="">Selecione tipo</option>
-                        <option value="perdido">Perdido</option>
-                        <option value="encontrado">Encontrado</option>
-                    </select>
 
-                    <input type="text" wire:model="city" placeholder="Cidade"
-                           class="w-full border rounded p-2">
+                    {{-- Nome --}}
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Nome</label>
+                        <input type="text" wire:model="name" class="w-full border rounded p-2">
+                    </div>
 
-                    <input type="text" wire:model="telefone" placeholder="Telefone"
-                           class="w-full border rounded p-2">
+                    {{-- Tipo --}}
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Tipo</label>
+                        <select wire:model="type" class="w-full border rounded p-2">
+                            <option value="">Selecione tipo</option>
+                            <option value="perdido">Perdido</option>
+                            <option value="encontrado">Encontrado</option>
+                        </select>
+                    </div>
 
-                    <textarea wire:model="description" placeholder="Descrição" maxlength="100"
-                               class="w-full border rounded p-2"></textarea>
+                    {{-- Cidade --}}
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Cidade</label>
+                        <input type="text" wire:model="city" class="w-full border rounded p-2">
+                    </div>
 
+                    {{-- Telefone --}}
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Telefone</label>
+                        <input type="text" wire:model="telefone" class="w-full border rounded p-2">
+                    </div>
+
+                    {{-- Descrição --}}
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Descrição</label>
+                        <textarea wire:model="description" maxlength="100"
+                                class="w-full border rounded p-2"></textarea>
+                    </div>
+
+                    {{-- Imagem atual --}}
                     @if($image_preview)
                         <div>
-                            <span>Imagem atual:</span>
+                            <label class="block text-sm font-semibold mb-1">Imagem atual</label>
                             <img src="{{ $image_preview }}" class="w-24 h-24 object-cover mt-1 rounded">
                         </div>
                     @endif
 
-                    <input type="file" wire:model="image" class="w-full mt-2">
+                    {{-- Upload de nova imagem --}}
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Nova imagem</label>
+                        <input type="file" wire:model="image" class="w-full">
+                    </div>
 
+                    {{-- Preview da nova imagem --}}
+                    @if ($image)
+                        <div class="mt-2">
+                            <span>Nova imagem:</span>
+                            <img src="{{ $image->temporaryUrl() }}" class="w-24 h-24 object-cover mt-1 rounded">
+                        </div>
+                    @endif
+
+                    {{-- Botões --}}
                     <div class="mt-4 flex justify-end gap-2">
                         <button wire:click="$set('showEditModal', false)"
                                 class="bg-gray-300 px-3 py-1 rounded">Cancelar</button>
                         <button wire:click="update"
                                 class="bg-blue-600 text-white px-3 py-1 rounded">Salvar</button>
                     </div>
+
                 </div>
             </div>
         </div>
     @endif
-
 </div>

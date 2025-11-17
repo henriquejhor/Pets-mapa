@@ -95,7 +95,7 @@ new class extends Component
                             <a href="{{ route('login') }}" class="text-gray-700 hover:underline">Log in</a>
                         @endif
                         @if(Route::has('register'))
-                            <a href="{{ route('register') }}" class="text-gray-700 hover:underline">Register</a>
+                            <a href="{{ route('register') }}" class="text-gray-700 hover:underline">Registrar</a>
                         @endif
                     </div>
                 @endauth
@@ -103,7 +103,7 @@ new class extends Component
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-black-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -114,14 +114,27 @@ new class extends Component
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden ">
         <div class="pt-2 pb-3 space-y-1 bg-white">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+
+                <i class="fa-solid fa-map-location-dot px-1 text-lg"></i>
+
                 {{ __('Mapa de Pets') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('pets.index')" :active="request()->routeIs('pets.index')">
+
+                <i class="fa-solid fa-paw px-1"></i>
+
                 {{ __('Pets Perdidos') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('minhas.publicacoes')" :active="request()->routeIs('minhas.publicacoes')">
+
+                <i class="fa-solid fa-list-ul px-1"></i>
+
+                {{ __('Minhas Publicações') }}
             </x-responsive-nav-link>
         </div>
 
@@ -144,12 +157,12 @@ new class extends Component
                     </button>
                 </div>
             @else
-                <div class="px-4 flex space-x-4">
+                <div class="px-4 flex space-x-4 text-xl">
                     @if(Route::has('login'))
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:underline">Log in</a>
+                        <a href="{{ route('login') }}" class="text-black hover:underline">Log in</a>
                     @endif
                     @if(Route::has('register'))
-                        <a href="{{ route('register') }}" class="text-gray-700 hover:underline">Register</a>
+                        <a href="{{ route('register') }}" class="text-black hover:underline">Registrar</a>
                     @endif
                 </div>
             @endauth

@@ -46,7 +46,7 @@
             <input type="text" 
                    wire:model.live="search" {{-- Adicione .live para atualização em tempo real --}}
                    placeholder="Buscar por nome, cidade ou tipo"
-                   class="border rounded p-2 w-full">
+                   class="border rounded-xl p-2 w-full">
         </div>
         
         {{-- Mensagem quando não encontrar resultados --}}
@@ -86,6 +86,10 @@
                             <img src="{{ asset('storage/'.$pet->image_path) }}"
                                  alt="Foto do Pet"
                                  class="mt-2 rounded w-40 h-40 object-cover ml-4 border-8 border-[#8AC7CF] flex-shrink-0">
+                        @else
+                            <img src="{{ asset('LogoNova.png') }}"
+                                alt="Foto Padrão"
+                                class="bg-white mt-2 rounded w-40 h-40 object-cover ml-4 border-8 border-[#8AC7CF] flex-shrink-0">
                         @endif
                     </div>
                 @endforeach

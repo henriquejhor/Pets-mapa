@@ -41,7 +41,7 @@ class PetsMap extends Component
     public function openPetModal($lat, $lng)
     {
         // "Porteiro" - Manda para o login com a mensagem de 'info'
-        // (Isso está correto)
+        
         if (!Auth::check()) {
             session()->flash('info', 'Você precisa estar logado para cadastrar um pet!');
             return redirect()->route('login'); 
@@ -56,13 +56,13 @@ class PetsMap extends Component
 
     public function submit()
     {
-        // Checagem de segurança (Correto)
+        // Checagem de segurança 
         if (!Auth::check()) {
             session()->flash('error', 'Sua sessão expirou. Por favor, faça login novamente.');
             return redirect()->route('login');
         }
 
-        // Validação (Correto)
+        // Validação 
         $this->validate();
 
         $imagePath = $this->image ? $this->image->store('pets', 'public') : null;
@@ -82,17 +82,14 @@ class PetsMap extends Component
         
         // ***** A MUDANÇA ESTÁ AQUI *****
 
-        // 1. Em vez de dispatch(), usamos session()
+        // SESSION
         session()->flash('message', 'Pet cadastrado com sucesso!');
         
-        // 2. Recarregamos os pets
+        // RECAREGAR PETS
         $this->pets = Pet::all();
         
-        // 3. Limpamos os campos
+        // LIMPAR CAMPOS
         $this->reset(['name','type','description','telefone','city','latitude','longitude','image']);
-
-        // 4. E O MAIS IMPORTANTE: NÓS NÃO FECHAMOS O MODAL AQUI
-        // $this->showModal = false; // <-- LINHA REMOVIDA
     }
 
     public function render()
