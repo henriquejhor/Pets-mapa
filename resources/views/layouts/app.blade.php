@@ -21,7 +21,9 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-[#4989C1]"> <!-- COR FUNDO GERAL-->
+        <div class="min-h-screen  bg-center bg-no-repeat bg-fixed bg-blend-overlay"
+        style="background-image: url('{{ asset('Fundo-Novo.png') }}');"
+>
             <livewire:layout.navigation />
 
             <!-- Page Heading -->

@@ -18,13 +18,13 @@ new class extends Component
 
 <nav x-data="{ open: false }" class="bg-[#8AC7CF] border-b border-gray-100"> <!-- COR FUNDO HEADER-->
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" wire:navigate>
-                        <x-application-logo class="block h-9 w-auto fill-current text-white-800" />
+                        <x-application-logo class="block h-20 w-auto fill-current text-white-800" />
                     </a>
                 </div>
 
@@ -39,7 +39,7 @@ new class extends Component
 
                     </x-nav-link> 
 
-                   <x-nav-link class="text-[#F7715D] hover:text-white font-semibold text-xl"
+                   <x-nav-link class="text-[#1B3B5A] hover:text-white font-semibold text-xl"
                          :href="route('pets.index')" :active="request()->routeIs('pets.index')">
 
                         <i class="fa-solid fa-paw px-1"></i>
@@ -49,7 +49,7 @@ new class extends Component
                     </x-nav-link>
 
                     @auth
-                        <x-nav-link class="text-[#01A58D] hover:text-white font-semibold text-xl"
+                        <x-nav-link class="text-[#047857] hover:text-white font-semibold text-xl"
                          :href="route('minhas.publicacoes')" :active="request()->routeIs('minhas.publicacoes')">
 
                         <i class="fa-solid fa-list-ul px-1"></i>

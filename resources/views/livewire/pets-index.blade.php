@@ -19,7 +19,7 @@
                     <span class="inline-flex items-center border text-sm font-medium px-3 py-1.5 rounded-full
                         {{ $selectedPet->type === 'perdido' 
                             ? 'bg-red-100 border-red-200 text-red-800' 
-                            : 'bg-emerald-100 border-emerald-200 text-emerald-800' 
+                            : 'bg-gray-100 border-gray-300 text-gray-800' 
                         }}">
                         <!-- Ícone de Patinha -->
                         <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -87,7 +87,7 @@
        {{-- Barra de Pesquisa --}}
         <div class="mb-4">
             <input type="text" 
-                   wire:model.live="search" {{-- Adicione .live para atualização em tempo real --}}
+                   wire:model.live="search" {{-- .live para atualização em tempo real --}}
                    placeholder="Buscar por nome, cidade ou tipo"
                    class="border rounded-xl p-2 w-full">
         </div>

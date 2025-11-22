@@ -16,6 +16,9 @@ class MyPets extends Component
     public $name, $type, $city, $description, $telefone, $image, $image_preview;
     
     public $showEditModal = false;
+
+    public $showDeleteModal = false;
+    public $petIdToDelete = null;
     
     public function render()
     {
@@ -71,16 +74,32 @@ class MyPets extends Component
         session()->flash('message', 'Publicação atualizada com sucesso!');
     }
 
-    // EXCLUIR PET
-    public function delete($id)
+    public function confirmDelete($id)
     {
-        $pet = Pet::where('id', $id)->where('user_id', Auth::id())->first();
+        $this->petIdToDelete = $id;
+        $this->showDeleteModal = true;
+    }
+
+    // EXCLUIR PET
+   public function delete()
+    {
+        // Busca pelo ID que guardamos na memória
+        $pet = Pet::where('id', $this->petIdToDelete)->where('user_id', Auth::id())->first();
+
         if ($pet) {
             if ($pet->image_path && file_exists(storage_path('app/public/'.$pet->image_path))) {
                 unlink(storage_path('app/public/'.$pet->image_path));
             }
             $pet->delete();
+            
             session()->flash('message', 'Publicação Excluída com Sucesso!');
         }
+
+        // Fecha o modal e limpa a variável
+        $this->showDeleteModal = false;
+        $this->petIdToDelete = null;
+        
+        // Recarrega a lista
+        $this->pets = Pet::where('user_id', Auth::id())->latest()->get();
     }
 }

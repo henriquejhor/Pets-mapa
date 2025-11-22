@@ -47,7 +47,7 @@
             const pets = @json($jsPets);
             pets.forEach(pet => {
                 if(!pet.latitude || !pet.longitude) return;
-                const iconUrl = pet.image || '/default-pet.png';
+                const iconUrl = pet.image || '/map dog.png';
                 const icon = L.icon({ iconUrl, iconSize:[40,40] });
                 const marker = L.marker([parseFloat(pet.latitude), parseFloat(pet.longitude)], { icon }).addTo(map);
                 let popupHtml = `<strong>${escapeHtml(pet.name || 'Sem nome')}</strong><br>`;

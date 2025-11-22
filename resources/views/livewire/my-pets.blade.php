@@ -1,6 +1,6 @@
-<div class="max-w-4xl mx-auto p-6 bg-[#01A58D] shadow rounded">
+<div class="max-w-4xl mx-auto p-6 bg-[#047857] shadow rounded">
 
-    <h1 class="text-2xl font-bold mb-4 text-white">Minhas Publicações</h1>
+    <h1 class="text-2xl font-bold mb-4 text-center text-white">Minhas Publicações</h1>
 
     @if (session()->has('success') || session()->has('message'))
         <div 
@@ -26,119 +26,180 @@
         </div>
     @endif
     @if($pets->isEmpty())
-        <p>Você ainda não publicou nenhum pet.</p>
+        <div class="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+            <i class="fa-solid fa-paw text-4xl text-gray-400 mb-3"></i>
+            <p class="text-gray-500 text-lg">Você ainda não publicou nenhum pet.</p>
+        </div>
     @else
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             @foreach($pets as $pet)
-                <div class="text-black p-4 border-4 border-[#8AC7CF] rounded shadow flex items-start justify-between bg-[#6BAFB7]">
+                
+                <!-- CARD COM NOVO DESIGN -->
+                <div class="bg-white block max-w-sm border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow duration-300 mx-auto w-full flex flex-col">
                     
-                    <div class="flex flex-col bg-[#8AC7CF] py-2 px-2 rounded-lg flex-1">
+                    <!-- 1. IMAGEM (Com LogoNova se vazio) -->
+                    <div class="h-56 overflow-hidden rounded-t-lg border-b border-gray-100 relative group">
+                        @if($pet->image_path)
+                            <img src="{{ asset('storage/'.$pet->image_path) }}" 
+                                 alt="Foto do Pet" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        @else
+                            <img src="{{ asset('LogoNova.png') }}" 
+                                 alt="Foto Padrão" 
+                                 class="w-full h-full object-cover bg-gray-50 p-4 transition-transform duration-500 group-hover:scale-105">
+                        @endif
+                    </div>
+
+                    <hr class="border-black border-t-2 w-full">
+
+                    <!-- CONTEÚDO DO CARD -->
+                    <div class="p-6 flex flex-col flex-grow text-center">
                         
-                        <h2 class="font-semibold text-2xl mb-2">{{ $pet->name ?? 'Sem nome'}}</h2>
-                        <p class="mb-1"><strong>Tipo:</strong> {{ $pet->type }}</p>
-                        <p class="mb-1"><strong>Cidade:</strong> {{ $pet->city }}</p>
-                        <p class="mb-4"><strong>Telefone:</strong> {{ $pet->telefone }}</p> 
-                        
-                        <div class="flex gap-3">
+                        <!-- 2. NOME -->
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 truncate">
+                            {{ $pet->name ?? 'Sem nome' }}
+                        </h5>
+
+                        <!-- 3. BADGE / STATUS -->
+                        <div class="mb-4">
+                            <span class="inline-flex items-center border text-xs font-medium px-2.5 py-1 rounded-full
+                                {{ $pet->type === 'perdido' 
+                                    ? 'bg-red-100 border-red-200 text-red-800' 
+                                    : 'bg-gray-100 border-gray-300 text-gray-800' 
+                                }}">
+                                
+                                <svg class="w-3 h-3 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm7 3c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zM5 5c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zM12 10c3.314 0 6 2.686 6 6s-2.686 6-6 6-6-2.686-6-6 2.686-6 6-6z"/>
+                                </svg>
+                                {{ ucfirst($pet->type) }}
+                            </span>
+                        </div>
+
+                        <!-- Detalhes Rápidos -->
+                        <div class="flex justify-center gap-4 text-sm text-gray-500 mb-4">
+                            <span class="flex items-center"><i class="fa-solid fa-location-dot mr-1 text-blue-400"></i> {{ $pet->city }}</span>
+                            <span class="flex items-center"><i class="fa-solid fa-phone mr-1 text-blue-400"></i> {{ $pet->telefone }}</span>
+                        </div>
+
+                        <!-- Descrição -->
+                        <p class="mb-6 font-normal text-gray-700 line-clamp-2 flex-grow">
+                            {{ $pet->description ?? 'Sem descrição.' }}
+                        </p>
+
+                        <!-- 5. BOTÕES DE AÇÃO (EDITAR / EXCLUIR) -->
+                        <div class="flex gap-2 justify-center mt-auto pt-4 border-t border-gray-100">
+                            
+                            <!-- Botão EDITAR (Azul) -->
                             <button wire:click="edit({{ $pet->id }})" 
-                                    class="bg-blue-600 text-white py-1 px-3 rounded-md hover:bg-blue-700 font-semibold">
-                                    <i class="fa-solid fa-pen-to-square text-white pt-1"></i>
+                                    class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none transition-colors">
+                                <i class="fa-solid fa-pen-to-square mr-2"></i>
                                 Editar
                             </button>
-                            <button wire:click="delete({{ $pet->id }})" 
+
+                            <!-- Botão EXCLUIR (Vermelho) -->
+                            <button wire:click="confirmDelete({{ $pet->id }})" 
                                     class="bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 font-semibold">
-                                    <i class="fa-solid fa-trash text-white pt-1"></i>
+                                <i class="fa-solid fa-trash text-white pt-1"></i>
                                 Excluir
                             </button>
                         </div>
-                    </div>
 
-                    @if($pet->image_path)
-                        <img src="{{ asset('storage/'.$pet->image_path) }}"
-                             alt="Foto do Pet"
-                             class="rounded w-40 h-40 object-cover ml-4 border-8 border-[#8AC7CF] flex-shrink-0">
-                    @endif
+                    </div>
                 </div>
+                <!-- FIM DO CARD -->
+
             @endforeach
         </div>
     @endif
 
-    
-    {{-- Modal de edição --}}
+    {{-- MODAL DE EDIÇÃO --}}
     @if($showEditModal)
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div class="bg-white rounded p-6 w-full max-w-md">
-                <h2 class="text-xl font-bold mb-4">Editar Publicação</h2>
+            <div class="bg-white rounded p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h2 class="text-xl font-bold text-gray-800">Editar Publicação</h2>
+                    <button wire:click="$set('showEditModal', false)" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                </div>
 
                 <div class="space-y-3">
-
-                    {{-- Nome --}}
                     <div>
-                        <label class="block text-sm font-semibold mb-1">Nome</label>
-                        <input type="text" wire:model="name" class="w-full border rounded p-2">
+                        <label class="block text-sm font-medium text-gray-700">Nome do Pet</label>
+                        <input type="text" wire:model="name" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
-
-                    {{-- Tipo --}}
                     <div>
-                        <label class="block text-sm font-semibold mb-1">Tipo</label>
-                        <select wire:model="type" class="w-full border rounded p-2">
-                            <option value="">Selecione tipo</option>
+                        <label class="block text-sm font-medium text-gray-700">Tipo</label>
+                        <select wire:model="type" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="">Selecione</option>
                             <option value="perdido">Perdido</option>
-                            <option value="encontrado">Encontrado</option>
+                            <option value="encontrado">Encontrado</option> 
                         </select>
                     </div>
-
-                    {{-- Cidade --}}
                     <div>
-                        <label class="block text-sm font-semibold mb-1">Cidade</label>
-                        <input type="text" wire:model="city" class="w-full border rounded p-2">
+                        <label class="block text-sm font-medium text-gray-700">Cidade</label>
+                        <input type="text" wire:model="city" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
-
-                    {{-- Telefone --}}
                     <div>
-                        <label class="block text-sm font-semibold mb-1">Telefone</label>
-                        <input type="text" wire:model="telefone" class="w-full border rounded p-2">
+                        <label class="block text-sm font-medium text-gray-700">Telefone</label>
+                        <input type="text" wire:model="telefone" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
-
-                    {{-- Descrição --}}
                     <div>
-                        <label class="block text-sm font-semibold mb-1">Descrição</label>
-                        <textarea wire:model="description" maxlength="100"
-                                class="w-full border rounded p-2"></textarea>
+                        <label class="block text-sm font-medium text-gray-700">Descrição</label>
+                        <textarea wire:model="description" maxlength="100" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
                     </div>
-
-                    {{-- Imagem atual --}}
+                    
                     @if($image_preview)
                         <div>
-                            <label class="block text-sm font-semibold mb-1">Imagem atual</label>
-                            <img src="{{ $image_preview }}" class="w-24 h-24 object-cover mt-1 rounded">
+                            <span class="block text-sm font-medium text-gray-700 mb-1">Imagem atual:</span>
+                            <img src="{{ $image_preview }}" class="w-24 h-24 object-cover rounded shadow-sm border">
                         </div>
                     @endif
-
-                    {{-- Upload de nova imagem --}}
+                    
                     <div>
-                        <label class="block text-sm font-semibold mb-1">Nova imagem</label>
-                        <input type="file" wire:model="image" class="w-full">
+                        <label class="block text-sm font-medium text-gray-700">Trocar Imagem</label>
+                        <input type="file" wire:model="image" class="w-full mt-2 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     </div>
 
-                    {{-- Preview da nova imagem --}}
-                    @if ($image)
-                        <div class="mt-2">
-                            <span>Nova imagem:</span>
-                            <img src="{{ $image->temporaryUrl() }}" class="w-24 h-24 object-cover mt-1 rounded">
-                        </div>
-                    @endif
-
-                    {{-- Botões --}}
-                    <div class="mt-4 flex justify-end gap-2">
-                        <button wire:click="$set('showEditModal', false)"
-                                class="bg-gray-300 px-3 py-1 rounded">Cancelar</button>
-                        <button wire:click="update"
-                                class="bg-blue-600 text-white px-3 py-1 rounded">Salvar</button>
+                    <div class="mt-6 flex justify-end gap-2 pt-4 border-t">
+                        <button wire:click="$set('showEditModal', false)" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">Cancelar</button>
+                        <button wire:click="update" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Salvar Alterações</button>
                     </div>
-
                 </div>
             </div>
         </div>
     @endif
+
+    {{-- MODAL DE exclusão --}}
+    @if($showDeleteModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+            x-transition.opacity>
+            
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-sm p-6 text-center">
+                
+                <!-- Ícone -->
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Tem certeza?</h3>
+                <p class="text-gray-500 text-sm mb-6">Essa ação não pode ser desfeita.</p>
+
+                <div class="flex justify-center gap-3">
+                    <!-- Botão Cancelar -->
+                    <button wire:click="$set('showDeleteModal', false)" 
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md font-medium w-full">
+                        Cancelar
+                    </button>
+                    
+                    <!-- Botão Confirmar -->
+                    <button wire:click="delete" 
+                            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium w-full shadow-md">
+                        Sim, Excluir
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+    
 </div>
